@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_class2/Job.dart';
+import 'package:flutter_class2/components/Product.dart';
+import 'package:http/http.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -11,20 +15,36 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
 
 
-  List jobs = [
-    Job(name: 'Jr. Software Engineer', degree: 'BSC', description: 'Web Developer', minimum_years_of_experience: 3),
-    Job(name: 'Sr. Software Engineer', degree: 'MSC', description: 'Web Developer', minimum_years_of_experience: 6),
-    Job(name: 'Teacher', degree: 'HSC', description: 'Primary School Teacher', minimum_years_of_experience: 2),
-    Job(name: 'Chef', degree: 'HSC', description: 'Cooking', minimum_years_of_experience: 3),
-    Job(name: 'Senior Lecturer', degree: 'MSC', description: 'Lecturer in science', minimum_years_of_experience: 10),
+  List products = [];
 
-  ];
+  void apiCall() async {
+    final url = Uri.parse('http://68.178.163.174:5501/product');
+
+    Response res = await get(url);
+
+    if(res.statusCode == 201){
+      List jsonData = jsonDecode(res.body);
+
+      setState(() {
+        products = jsonData.map((e) => Product.fromJson(e)).toList();
+      });
+    }
+
+  }
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    apiCall();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Job App', style: TextStyle(fontWeight: FontWeight.bold),),
+        title: Text('Product App', style: TextStyle(fontWeight: FontWeight.bold),),
         centerTitle: true,
         backgroundColor: Colors.pink[300],
       ),
@@ -33,7 +53,7 @@ class _HomeState extends State<Home> {
         child: Container(
           alignment: Alignment.center,
           child: Column(
-            children: jobs.map((i) {
+            children: products.map((i) {
               return Card(
                 elevation: 3,
                 child: Container(
@@ -41,11 +61,11 @@ class _HomeState extends State<Home> {
                   margin: EdgeInsets.symmetric(vertical: 20, horizontal: 5),
                   child: Column(
                     children: [
-                      Text('Job Name: ${i.name}', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                      Text('Product Name: ${i.name}', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
                       SizedBox(height: 10,),
-                      Text('Job Description: ${i.description}'),
-                      Text('Job Requirement: ${i.degree}'),
-                      Text('Minimum Experience: ${i.minimum_years_of_experience} years'),
+                      Text('Product Description: ${i.description}'),
+                      Text('Product Rating: ${i.rating}'),
+                      Text('Product PRice: ${i.price} tk'),
 
                       SizedBox(height: 10,),
 
