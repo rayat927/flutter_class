@@ -281,3 +281,39 @@ class _HomeState extends State<Home> {
 //     });
 //   }
 // }
+
+// MultipartRequest request = MultipartRequest('POST', Uri.parse('http://68.178.163.174:5000/breeding/treatment'));
+//
+// // print(MultipartFile('file', imageFile!.readAsBytes().asStream(), imageFile!.lengthSync()));
+//
+//
+// // request.files.add(MultipartFile('file', imageFile!.readAsBytes().asStream(), imageFile!.lengthSync(), filename: imageFile!.path.split('/').last));
+// final uploadList = <MultipartFile>[];
+// for (final imageFile in imageFiles!) {
+// uploadList.add(
+// await MultipartFile(
+// 'files',
+// imageFile!.readAsBytes().asStream(),
+// imageFile.lengthSync(),
+// filename: imageFile.path
+//     .split('/')
+//     .last,
+// ),
+// );
+// }
+//
+// request.files.addAll(uploadList);
+//
+// Map<String, String> _fields = Map();
+//
+// _fields.addAll({
+// 'shed_id': shed_id!,
+// 'seat_id': seat_id!,
+// 'cow_id': cow_id!,
+// 'disease_desc': diseases_description.text,
+// 'farm_id': farm_id!,
+// });
+//
+// request.fields.addAll(_fields);
+//
+// StreamedResponse res = await request.send();
