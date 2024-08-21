@@ -97,3 +97,187 @@ class _HomeState extends State<Home> {
     );
   }
 }
+
+
+// import 'package:flutter/material.dart';
+// import 'package:flutter2/components/CustomAppBar.dart';
+// import 'package:image_picker/image_picker.dart';
+// import 'dart:io';
+
+// class FarmarPrfile extends StatefulWidget {
+//   const FarmarPrfile({super.key});
+
+//   @override
+//   State<FarmarPrfile> createState() => _FarmarPrfileState();
+// }
+
+// class _FarmarPrfileState extends State<FarmarPrfile> {
+//   File? _image;
+//   final ImagePicker _picker = ImagePicker();
+//   final _formKey = GlobalKey<FormState>();
+
+//   String _farmarName = '';
+//   String _location = '';
+//   String _address = '';
+//   String _mobileNumber = '';
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: CustomAppBar(title: 'Farmar Info'),
+//       body: Padding(
+//         padding: const EdgeInsets.all(20.0),
+//         child: Form(
+//           key: _formKey,
+//           child: Column(
+//             children: [
+//               Center(
+//                 child: GestureDetector(
+//                   onTap: () {
+//                     _showPicker(context);
+//                   },
+//                   child: CircleAvatar(
+//                     radius: 55,
+//                     backgroundColor: Color(0xffFDCF09),
+//                     child: _image != null
+//                         ? ClipRRect(
+//                       borderRadius: BorderRadius.circular(50),
+//                       child: Image.file(
+//                         _image!,
+//                         width: 100,
+//                         height: 100,
+//                         fit: BoxFit.fitHeight,
+//                       ),
+//                     )
+//                         : Container(
+//                       decoration: BoxDecoration(
+//                           color: Colors.grey[200],
+//                           borderRadius: BorderRadius.circular(50)),
+//                       width: 100,
+//                       height: 100,
+//                       child: Icon(
+//                         Icons.camera_alt,
+//                         color: Colors.grey[800],
+//                       ),
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//               SizedBox(height: 20),
+//               TextFormField(
+//                 decoration: InputDecoration(
+//                   labelText: 'Farmar Name',
+//                   border: OutlineInputBorder(),
+//                 ),
+//                 // validator: (value) {
+//                 //   if (value == null || value.isEmpty) {
+//                 //     return 'Please enter farmar name';
+//                 //   }
+//                 //   return null;
+//                 // },
+//                 onSaved: (value) => _farmarName = value!,
+//               ),
+//               SizedBox(height: 10),
+//               TextFormField(
+//                 decoration: InputDecoration(
+//                   labelText: 'Location',
+//                   border: OutlineInputBorder(),
+//                 ),
+
+//                 onSaved: (value) => _location = value!,
+//               ),
+//               SizedBox(height: 10),
+//               TextFormField(
+//                 decoration: InputDecoration(
+//                   labelText: 'Address',
+//                   border: OutlineInputBorder(),
+//                 ),
+//                 validator: (value) {
+//                   if (value == null || value.isEmpty) {
+//                     return 'Please enter address';
+//                   }
+//                   return null;
+//                 },
+//                 onSaved: (value) => _address = value!,
+//               ),
+//               SizedBox(height: 10),
+//               TextFormField(
+//                 decoration: InputDecoration(
+//                   labelText: 'Mobile Number',
+//                   border: OutlineInputBorder(),
+//                 ),
+
+//                 onSaved: (value) => _mobileNumber = value!,
+//               ),
+//               SizedBox(height: 20),
+//               ElevatedButton(
+//                 onPressed: () {
+//                   if (_formKey.currentState!.validate()) {
+//                     _formKey.currentState!.save();
+//                     // Save the form data to your database or API
+//                     print('Form data: $_farmarName, $_location, $_address, $_mobileNumber');
+//                   }
+//                 },
+//                 child: Text('Save'),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+
+//   void _showPicker(context) {
+//     showModalBottomSheet(
+//         context: context,
+//         builder: (BuildContext bc) {
+//           return SafeArea(
+//             child: Container(
+//               child: new Wrap(
+//                 children: <Widget>[
+//                   new ListTile(
+//                       leading: new Icon(Icons.photo_library),
+//                       title: new Text('Photo Library'),
+//                       onTap: () {
+//                         _imgFromGallery();
+//                         Navigator.of(context).pop();
+//                       }),
+//                   new ListTile(
+//                     leading: new Icon(Icons.photo_camera),
+//                     title: new Text('Camera'),
+//                     onTap: () {
+//                       _imgFromCamera();
+//                       Navigator.of(context).pop();
+//                     },
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           );
+//         });
+//   }
+
+//   _imgFromCamera() async {
+//     final pickedFile = await _picker.pickImage(source: ImageSource.camera);
+
+//     setState(() {
+//       if (pickedFile != null) {
+//         _image = File(pickedFile.path);
+//       } else {
+//         _image = null;
+//       }
+//     });
+//   }
+
+//   _imgFromGallery() async {
+//     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
+//     setState(() {
+//       if (pickedFile != null) {
+//         _image = File(pickedFile.path);
+//       } else {
+//         _image = null;
+//       }
+//     });
+//   }
+// }
