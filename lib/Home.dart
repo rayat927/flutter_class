@@ -97,6 +97,25 @@ class _HomeState extends State<Home> {
         title: Text('Product App', style: TextStyle(fontWeight: FontWeight.bold),),
         centerTitle: true,
         backgroundColor: Colors.pink[300],
+        actions: [
+          Stack(
+            children: [
+              Icon(CupertinoIcons.cart, size: 30,),
+              Positioned(
+                  left: 0,
+                  child: Container(
+                height: 18,
+                width: 18,
+                decoration: BoxDecoration(
+                  color: Colors.purpleAccent,
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                child: Text('10', textAlign: TextAlign.center,),
+              ))
+            ],
+          ),
+          SizedBox(width: 20,)
+        ],
       ),
 
       body: SingleChildScrollView(
