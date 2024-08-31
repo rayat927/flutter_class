@@ -3,12 +3,14 @@ class Product {
   int? price;
   int? rating;
   String? description;
+  String? image;
 
-  Product({this.name, this.price, this.rating, this.description});
+  Product({this.name, this.price, this.rating, this.description, this.image});
    Product.fromJson(json){
     name = json['name'];
     rating = json['rating'];
     price = json['price'];
     description = json['description'];
+    image = json['image_url'];
   }
 }

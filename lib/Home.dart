@@ -1,8 +1,11 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_class2/Job.dart';
 import 'package:flutter_class2/components/Product.dart';
+import 'package:flutter_rating/flutter_rating.dart';
 import 'package:http/http.dart';
 
 class Home extends StatefulWidget {
@@ -26,7 +29,7 @@ class _HomeState extends State<Home> {
   List products = [];
 
   void apiCall() async {
-    final url = Uri.parse('http://68.178.163.174:5501/product');
+    final url = Uri.parse('http://68.178.163.174:5501/product/top_rated');
 
     Response res = await get(url);
 
@@ -90,12 +93,56 @@ class _HomeState extends State<Home> {
                     });
                   },
                   itemBuilder: (context, index) {
-                    return Container(
-                      margin: EdgeInsets.all(10),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Image(image: AssetImage(images[index]),fit: BoxFit.cover,),
+                    return Stack(
+                      alignment: Alignment.center,
+                      children: [
+
+                        Container(
+                          height: 150,
+                          width: 400,
+                          alignment: Alignment.topCenter,
+                        margin: EdgeInsets.all(10),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image(image: AssetImage(images[index % images.length]),fit: BoxFit.cover,),
+                        ),
                       ),
+
+                       products.isEmpty != true ? Positioned(
+                          bottom: 0,
+                          child: Card(
+                            child: Container(
+                              height: 80,
+                              width: 200,
+                              child: Row(
+                                children: [
+                                  SizedBox(width: 20,),
+                                  Container(
+                                    width: 50,
+                                    height: 50,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(50),
+                                      child: Image(image: NetworkImage(products[index % images.length].image), fit: BoxFit.cover),
+                                    ),
+                                  ),
+
+                                  Column(
+                                    children: [
+                                      Text('${products[index % images.length].name}'),
+                                      StarRating(
+                                        rating: products[index % images.length].rating.toDouble(),
+                                        allowHalfRating: false,
+                                        color: Colors.yellow[900],
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+
+                        ): Text(''),
+                      ],
                     );
                   },
                 ),
@@ -133,45 +180,60 @@ class _HomeState extends State<Home> {
 
               SizedBox(height: 20,),
 
-              Column(
-                children: products.map((i) {
-                  return Card(
-                    elevation: 3,
-                    child: Container(
-                      width: 300,
-                      margin: EdgeInsets.symmetric(vertical: 20, horizontal: 5),
-                      child: Column(
-                        children: [
-                          Text('Product Name: ${i.name}', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
-                          SizedBox(height: 10,),
-                          Text('Product Description: ${i.description}'),
-                          Text('Product Rating: ${i.rating}'),
-                          Text('Product PRice: ${i.price} tk'),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: products.map((i) {
+                    return Card(
+                      elevation: 6,
+                      color: Colors.grey[200],
+                      child: Container(
 
-                          SizedBox(height: 10,),
-
-                          GestureDetector(
-                            child: Container(
-                              width: 100,
-                              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                              decoration: BoxDecoration(
-                                  color: Colors.green,
-                                  border: Border.all(color: Colors.black)
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text('Apply'),
-                                  Icon(Icons.done)
-                                ],
+                        width: 250,
+                        height: 330,
+                        margin: EdgeInsets.symmetric(vertical: 20, horizontal: 5),
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 150,
+                              width: 150,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: Image(image: NetworkImage(i.image),fit: BoxFit.cover,),
                               ),
                             ),
-                          )
-                        ],
+                            Text(' ${i.name}', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold), ),
+                            SizedBox(height: 10,),
+                            Text('${i.description}', maxLines: 2, overflow: TextOverflow.ellipsis,),
+                            Text('Product Rating: ${i.rating}'),
+                            Text('Product PRice: ${i.price} tk'),
+
+                            SizedBox(height: 10,),
+
+                            GestureDetector(
+                              child: Container(
+                                width: 100,
+                                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                decoration: BoxDecoration(
+                                    color: Colors.green,
+                                    border: Border.all(color: Colors.black)
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('Apply'),
+                                    Icon(Icons.done)
+                                  ],
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                }).toList(),
+                    );
+                  }).toList(),
+                ),
+
               )
             ]
 
