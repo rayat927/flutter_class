@@ -14,6 +14,14 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
+  List images = [
+    'assets/banner1.jpg',
+    'assets/banner2.jpg'
+  ];
+
+  int currentIndex = 0;
+
+  final PageController controller = PageController();
 
   List products = [];
 
@@ -30,6 +38,20 @@ class _HomeState extends State<Home> {
       });
     }
 
+  }
+
+  Widget buildIndicator(bool isSelected) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 1),
+      child: Container(
+        height: isSelected ? 8 : 6,
+        width: isSelected ? 8 : 6,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: isSelected ? Colors.black : Colors.grey,
+        ),
+      ),
+    );
   }
 
 
@@ -53,44 +75,106 @@ class _HomeState extends State<Home> {
         child: Container(
           alignment: Alignment.center,
           child: Column(
-            children: products.map((i) {
-              return Card(
-                elevation: 3,
-                child: Container(
-                  width: 300,
-                  margin: EdgeInsets.symmetric(vertical: 20, horizontal: 5),
-                  child: Column(
-                    children: [
-                      Text('Product Name: ${i.name}', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
-                      SizedBox(height: 10,),
-                      Text('Product Description: ${i.description}'),
-                      Text('Product Rating: ${i.rating}'),
-                      Text('Product PRice: ${i.price} tk'),
 
-                      SizedBox(height: 10,),
 
-                      GestureDetector(
-                        child: Container(
-                          width: 100,
-                          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          decoration: BoxDecoration(
-                            color: Colors.green,
-                            border: Border.all(color: Colors.black)
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text('Apply'),
-                              Icon(Icons.done)
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+            children: [
+
+              SizedBox(
+                height: 200,
+                width: double.infinity,
+                child: PageView.builder(
+                  controller: controller,
+                  onPageChanged: (index) {
+                    setState(() {
+                      currentIndex = index % images.length;
+                    });
+                  },
+                  itemBuilder: (context, index) {
+                    return Container(
+                      margin: EdgeInsets.all(10),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Image(image: AssetImage(images[index]),fit: BoxFit.cover,),
+                      ),
+                    );
+                  },
                 ),
-              );
-            }).toList(),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (var i = 0; i < images.length; i++)
+                    buildIndicator(currentIndex == i)
+                ],
+              ),
+              // Padding(
+              //   padding: const EdgeInsets.all(8.0),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //     children: [
+              //       IconButton(
+              //         onPressed: () {
+              //           controller.jumpToPage(currentIndex - 1);
+              //         },
+              //         icon: Icon(Icons.arrow_back),
+              //       ),
+              //       IconButton(
+              //         onPressed: () {
+              //           controller.jumpToPage(currentIndex + 1);
+              //         },
+              //         icon: Icon(Icons.arrow_forward),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+
+              SizedBox(height: 20,),
+
+              Column(
+                children: products.map((i) {
+                  return Card(
+                    elevation: 3,
+                    child: Container(
+                      width: 300,
+                      margin: EdgeInsets.symmetric(vertical: 20, horizontal: 5),
+                      child: Column(
+                        children: [
+                          Text('Product Name: ${i.name}', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                          SizedBox(height: 10,),
+                          Text('Product Description: ${i.description}'),
+                          Text('Product Rating: ${i.rating}'),
+                          Text('Product PRice: ${i.price} tk'),
+
+                          SizedBox(height: 10,),
+
+                          GestureDetector(
+                            child: Container(
+                              width: 100,
+                              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                              decoration: BoxDecoration(
+                                  color: Colors.green,
+                                  border: Border.all(color: Colors.black)
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text('Apply'),
+                                  Icon(Icons.done)
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                }).toList(),
+              )
+            ]
+
           ),
         ),
       ),
