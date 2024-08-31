@@ -68,6 +68,31 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer(
+        elevation: 4,
+
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            Container(
+              child: UserAccountsDrawerHeader(
+                accountName: Text('Fyaz Rayat'),
+                accountEmail: Text('rayat@gmail.com'),
+                decoration: BoxDecoration(
+                  color: Colors.redAccent
+                ),
+              ),
+            ),
+
+
+
+            ListTile(
+              leading: Icon(CupertinoIcons.profile_circled),
+              title: Text('User Profile'),
+            )
+          ],
+        ),
+      ),
       appBar: AppBar(
         title: Text('Product App', style: TextStyle(fontWeight: FontWeight.bold),),
         centerTitle: true,
@@ -81,6 +106,8 @@ class _HomeState extends State<Home> {
 
 
             children: [
+
+
 
               SizedBox(
                 height: 200,
