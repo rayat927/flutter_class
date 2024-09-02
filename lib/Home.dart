@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_class2/Job.dart';
+import 'package:flutter_class2/Providers/CartProvider.dart';
 import 'package:flutter_class2/components/Product.dart';
 import 'package:flutter_rating/flutter_rating.dart';
 import 'package:http/http.dart';
@@ -67,6 +68,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final cartProvider = CartProvider.of(context);
     return Scaffold(
       drawer: Drawer(
         elevation: 4,
@@ -98,22 +100,27 @@ class _HomeState extends State<Home> {
         centerTitle: true,
         backgroundColor: Colors.pink[300],
         actions: [
-          Stack(
-            children: [
-              Icon(CupertinoIcons.cart, size: 30,),
-              Positioned(
-                  left: 0,
-                  top: 0,
-                  child: Container(
-                                  height: 18,
-                                  width: 18,
-                                  decoration: BoxDecoration(
-                  color: Colors.purpleAccent,
-                  borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  child: Text('10', textAlign: TextAlign.center,),
-                                ))
-            ],
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, '/cart');
+            },
+            child: Stack(
+              children: [
+                Icon(CupertinoIcons.cart, size: 30,),
+                Positioned(
+                    left: 0,
+                    top: 0,
+                    child: Container(
+                                    height: 18,
+                                    width: 18,
+                                    decoration: BoxDecoration(
+                    color: Colors.purpleAccent,
+                    borderRadius: BorderRadius.circular(50),
+                                    ),
+                                    child: Text('${cartProvider.cartQuantity}', textAlign: TextAlign.center,),
+                                  ))
+              ],
+            ),
           ),
           SizedBox(width: 20,)
         ],
@@ -258,8 +265,11 @@ class _HomeState extends State<Home> {
                             SizedBox(height: 10,),
 
                             GestureDetector(
+                              onTap: (){
+                                cartProvider.addToCart(i);
+                              },
                               child: Container(
-                                width: 100,
+                                width: 150,
                                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                                 decoration: BoxDecoration(
                                     color: Colors.green,
@@ -268,7 +278,7 @@ class _HomeState extends State<Home> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text('Apply'),
+                                    Text('Add to Cart'),
                                     Icon(Icons.done)
                                   ],
                                 ),
