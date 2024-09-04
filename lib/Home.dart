@@ -89,6 +89,9 @@ class _HomeState extends State<Home> {
 
 
             ListTile(
+              onTap: () {
+                Navigator.pushNamed(context, '/profile');
+              },
               leading: Icon(CupertinoIcons.profile_circled),
               title: Text('User Profile'),
             )
