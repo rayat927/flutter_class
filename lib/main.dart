@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_class2/Bloc/cart_bloc.dart';
 import 'package:flutter_class2/CartPage.dart';
 import 'package:flutter_class2/Home.dart';
 import 'package:flutter_class2/Profile.dart';
@@ -13,10 +15,10 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) =>  MultiProvider(
+  Widget build(BuildContext context) =>  MultiBlocProvider(
 
         providers: [
-          ChangeNotifierProvider(create: (_) => CartProvider())
+          BlocProvider(create: (_) => CartBloc())
         ],
     child: MaterialApp(
       initialRoute: '/',

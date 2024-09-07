@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -15,6 +18,8 @@ class _ProfileState extends State<Profile> {
 
   Map data = {};
 
+  File? image;
+
   void getData() async {
     final url = Uri.parse('http://68.178.163.174:5501/user/?id=1');
 
@@ -26,8 +31,46 @@ class _ProfileState extends State<Profile> {
     });
   }
 
-  void updateProfilePic() async {
+  void chooseFromGallery() async {
+    var image_picker = await ImagePicker();
 
+    var file = await image_picker.pickImage(source: ImageSource.gallery);
+
+    if(file != null){
+      File? img = File(file.path);
+       cropImageAndUpload(img);
+      setState(() {
+        image = img;
+      });
+    }
+  }
+
+  void cropImageAndUpload(File imageFile) async {
+    CroppedFile? croppedImage = await ImageCropper().cropImage(sourcePath: imageFile.path);
+    if(croppedImage == null) return null;
+    var img = File(croppedImage.path);
+
+    var request = MultipartRequest('PUT', Uri.parse('http://68.178.163.174:5501/user/profile_pic_update?id=1'));
+
+    request.files.add(await MultipartFile.fromPath('image', img.path));
+
+    StreamedResponse res = await request.send();
+
+    print(res.statusCode);
+
+    getData();
+    // return File(croppedImage.path);
+  }
+
+  void updateProfile() async {
+    var url = Uri.parse('http://68.178.163.174:5501/user/update?id=1');
+
+    Map body = {
+      'name': 'Admin Rayat',
+      'email': 'admin@gmail.com'
+    };
+
+    Response res = await put(url, body: body);
   }
 
   @override
@@ -69,7 +112,7 @@ class _ProfileState extends State<Profile> {
                   right: 30,
                   child: GestureDetector(
                     onTap: () {
-
+                        chooseFromGallery();
                     },
                     child: Container(
                         decoration: BoxDecoration(
@@ -81,7 +124,11 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
               ],
-            )
+            ),
+            ElevatedButton(onPressed: () {
+              updateProfile();
+            }, child: Text('update'))
+
           ],
         ): CircularProgressIndicator(),
       ),

@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_class2/Bloc/cart_bloc.dart';
+
 import 'package:flutter_class2/Job.dart';
 import 'package:flutter_class2/Providers/CartProvider.dart';
 import 'package:flutter_class2/components/Product.dart';
@@ -68,7 +71,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    final cartProvider = CartProvider.of(context);
+    // final cartProvider = CartProvider.of(context);
     return Scaffold(
       drawer: Drawer(
         elevation: 4,
@@ -120,7 +123,16 @@ class _HomeState extends State<Home> {
                     color: Colors.purpleAccent,
                     borderRadius: BorderRadius.circular(50),
                                     ),
-                                    child: Text('${cartProvider.cartQuantity}', textAlign: TextAlign.center,),
+                                    child: BlocBuilder<CartBloc, CartState>(
+                                      builder: (context, state) {
+                                        if(state is CartState){
+                                          return Text('${state.cartQuantity}', textAlign: TextAlign.center,);
+                                        }else {
+                                          return Text('');
+                                        }
+                                        ;
+                                      }
+                                    ),
                                   ))
               ],
             ),
@@ -269,7 +281,7 @@ class _HomeState extends State<Home> {
 
                             GestureDetector(
                               onTap: (){
-                                cartProvider.addToCart(i);
+                                BlocProvider.of<CartBloc>(context).add(AddToCart(i));
                               },
                               child: Container(
                                 width: 150,
